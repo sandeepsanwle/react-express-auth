@@ -19,11 +19,14 @@ const Login = () => {
     userLogin(data)
     .then((res)=>{
         if(res.data.status === 200){
-            let token = res.data.data.token.split(' ')[1];
+            let response = res.data.data;
+            let token = response.token.split(' ')[1];
             if(token){
                 localStorage.setItem('token',token);
+                localStorage.setItem('userName',response.userName);
+                localStorage.setItem('email',response.email);
+                navigate("/dashboard")
             }
-            navigate("/dashboard")
          }
     })
     .catch((err) => {

@@ -1,10 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
+import Navbar from "./Navbar";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+
+  useEffect(()=>{
+    if (!token) {
+      navigate('/login');
+    }
+  },[token])
+
   return (
-    <div className="container">
+    <>
+      <Navbar/>
       <h2>Dashboard</h2>
-    </div>
+    </>
   );
 };
 

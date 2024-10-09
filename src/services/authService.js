@@ -18,6 +18,19 @@ export const createUser = (userData) => {
     });
 };
 
+export const getAllUsers = () => {
+  const token = localStorage.getItem("token");
+  return axios({
+    method: "get",
+    url: `http://localhost:5000/user/all`,
+    headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+    responseType: "json",
+  })
+}
+
 // export const userLogout = () => {
 //   const accessToken = window.localStorage.getItem("accessToken");
 //   return axios({

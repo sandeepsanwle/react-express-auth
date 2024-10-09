@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const { hashPassword, comparePassword } = require('../utils/hash');
 
 
-// Create a new user
 const createUser = async (req, res) => {
     const { name, email, password } = req.body;
 
@@ -46,17 +45,22 @@ const loginUSer = async (req, res) => {
             return res.status(400).json();
         }
 
-        const token = jwt.sign({ name: user.name, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ name: user.name, email: user.email }, process.env.JWT_SECRET, { expiresIn: '300s' });
+
+        const userDetail = {
+            token: `Bearer ${token}`,
+            userName: user.name,
+            email: user.email
+        }
 
         res.locals.message = "Login successful";
-        res.json({token: `Bearer ${token}`});
+        res.json(userDetail);
     } catch (error) {
         res.locals.message = "Server error";
         res.status(500).json();
     }
 };
 
-// Get all users
 const getAllUsers = async (req, res) => {
     try {
         const users = await User.find();
@@ -68,7 +72,6 @@ const getAllUsers = async (req, res) => {
     }
 };
 
-// Get a single user by ID
 const getUserById = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
@@ -84,7 +87,6 @@ const getUserById = async (req, res) => {
     }
 };
 
-// Update a user by ID
 const updateUser = async (req, res) => {
     try {
         const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -101,7 +103,6 @@ const updateUser = async (req, res) => {
     }
 };
 
-// Delete a user by ID
 const deleteUser = async (req, res) => {
     try {
         const user = await User.findByIdAndDelete(req.params.id);
